@@ -1,9 +1,9 @@
-from textnode import TextNode
+from src.copystatic import copy_static_to_public
 
 
 def main():
-    test_text_node = TextNode("This is a text node", "bold", "https://www.boot.dev")
-    print(test_text_node)
+    print("Hier")
+    copy_static_to_public()
 
 
 main()
