@@ -1,6 +1,6 @@
-from src.htmlnode import ParentNode
-from src.inline_markdown import text_to_textnodes
-from src.textnode import TextNode, text_node_to_html_mode
+from htmlnode import ParentNode
+from inline_markdown import text_to_textnodes
+from textnode import TextNode, text_node_to_html_mode
 
 md_block_type_paragraph = "paragraph"
 md_block_type_heading = "heading"
@@ -100,16 +100,16 @@ def heading_to_html_node(block):
             break
     if level + 1 >= len(block):
         raise ValueError(f"Invalid heading level: {level}")
-    text = block[level + 1 :]
+    text = block[level + 1:]
     children = text_to_children(text)
     return ParentNode(f"h{level}", children)
 
 
 def code_to_html_node(block):
+    block = block.strip("`").strip()
     lines = block.split("\n")
     children = []
     for line in lines:
-        line = line.strip("'").strip()
         textnode = text_to_children(line)
         children.append(ParentNode("code", textnode))
     return ParentNode("pre", children)
@@ -164,3 +164,11 @@ def filter_empty_blocks(block):
 
 def strip_blocks(block):
     return block.strip()
+
+
+def extract_title(markdown):
+    index = markdown.find("# ")
+    half = markdown[index+2:]
+    nl_index = half.find("\n")
+    result = half[:nl_index]
+    return result

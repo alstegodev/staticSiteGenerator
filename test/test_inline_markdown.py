@@ -75,9 +75,9 @@ class TestInlineMarkdown(unittest.TestCase):
 
     def test_extract_markdown_images(self):
         matches = extract_markdown_images(
-            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+            "This is text with an ![images](https://i.imgur.com/zjjcJKZ.png)"
         )
-        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+        self.assertListEqual([("images", "https://i.imgur.com/zjjcJKZ.png")], matches)
 
     def test_extract_markdown_links(self):
         matches = extract_markdown_links(
@@ -93,44 +93,44 @@ class TestInlineMarkdown(unittest.TestCase):
 
     def test_split_image(self):
         node = TextNode(
-            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)",
+            "This is text with an ![images](https://i.imgur.com/zjjcJKZ.png)",
             text_type_text,
         )
         new_nodes = split_nodes_image([node])
         self.assertListEqual(
             [
                 TextNode("This is text with an ", text_type_text),
-                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode("images", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
             ],
             new_nodes,
         )
 
     def test_split_image_single(self):
         node = TextNode(
-            "![image](https://www.example.com/image.png)",
+            "![images](https://www.example.com/image.png)",
             text_type_text,
         )
         new_nodes = split_nodes_image([node])
         self.assertListEqual(
             [
-                TextNode("image", text_type_image, "https://www.example.com/image.png"),
+                TextNode("images", text_type_image, "https://www.example.com/image.png"),
             ],
             new_nodes,
         )
 
     def test_split_images(self):
         node = TextNode(
-            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            "This is text with an ![images](https://i.imgur.com/zjjcJKZ.png) and another ![second images](https://i.imgur.com/3elNhQu.png)",
             text_type_text,
         )
         new_nodes = split_nodes_image([node])
         self.assertListEqual(
             [
                 TextNode("This is text with an ", text_type_text),
-                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode("images", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" and another ", text_type_text),
                 TextNode(
-                    "second image", text_type_image, "https://i.imgur.com/3elNhQu.png"
+                    "second images", text_type_image, "https://i.imgur.com/3elNhQu.png"
                 ),
             ],
             new_nodes,
@@ -155,7 +155,7 @@ class TestInlineMarkdown(unittest.TestCase):
 
     def test_text_to_textnodes(self):
         nodes = text_to_textnodes(
-            "This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)"
+            "This is **text** with an *italic* word and a `code block` and an ![images](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)"
         )
         self.assertListEqual(
             [
@@ -166,7 +166,7 @@ class TestInlineMarkdown(unittest.TestCase):
                 TextNode(" word and a ", text_type_text),
                 TextNode("code block", text_type_code),
                 TextNode(" and an ", text_type_text),
-                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode("images", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" and a ", text_type_text),
                 TextNode("link", text_type_link, "https://boot.dev"),
             ],
@@ -175,12 +175,12 @@ class TestInlineMarkdown(unittest.TestCase):
 
     def test_text_to_textnodes_reverse(self):
         nodes = text_to_textnodes(
-            "This is ![image](https://i.imgur.com/zjjcJKZ.png) with an `code block` word and a **text** and an [link](https://boot.dev) and a *italic*"
+            "This is ![images](https://i.imgur.com/zjjcJKZ.png) with an `code block` word and a **text** and an [link](https://boot.dev) and a *italic*"
         )
         self.assertListEqual(
             [
                 TextNode("This is ", text_type_text),
-                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode("images", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" with an ", text_type_text),
                 TextNode("code block", text_type_code),
                 TextNode(" word and a ", text_type_text),
